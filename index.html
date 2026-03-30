@@ -135,7 +135,6 @@
         .field input::placeholder {
             color: var(--text-dim);
         }
-        /* Fix date input color on dark bg */
         .field input[type="date"]::-webkit-calendar-picker-indicator {
             filter: invert(1);
         }
@@ -205,7 +204,7 @@
         .calendar-nav button:hover {
             border-color: var(--white);
         }
-        .calendar-month {
+        .cal-month-label {
             font-family: var(--font-display);
             font-weight: 700;
             font-size: 0.95rem;
@@ -217,11 +216,9 @@
             display: flex;
             gap: 6px;
             margin-bottom: 10px;
-            flex-wrap: wrap;
         }
         .weekday-btn {
             flex: 1;
-            min-width: 38px;
             padding: 6px 2px;
             font-size: 0.65rem;
             letter-spacing: 1px;
@@ -245,12 +242,12 @@
             border-color: var(--white);
         }
 
-        .calendar-grid {
+        .cal-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 4px;
         }
-        .calendar-header-cell {
+        .cal-hdr {
             text-align: center;
             font-size: 0.6rem;
             letter-spacing: 1px;
@@ -259,7 +256,7 @@
             padding: 4px 0 8px;
             font-weight: 500;
         }
-        .calendar-day {
+        .cal-day {
             aspect-ratio: 1;
             display: flex;
             align-items: center;
@@ -272,31 +269,62 @@
             color: var(--text-muted);
             border: 1px solid transparent;
         }
-        .calendar-day:hover {
+        .cal-day:hover {
             border-color: var(--border-light);
         }
-        .calendar-day.selected {
+        .cal-day.selected {
             background: var(--white);
             color: var(--black);
             font-weight: 600;
         }
-        .calendar-day.empty {
+        .cal-day.empty {
             cursor: default;
         }
-        .calendar-day.empty:hover {
+        .cal-day.empty:hover {
             border-color: transparent;
         }
 
-        .selected-count {
-            text-align: center;
+        /* ─── Selected dates chips ─── */
+        .selected-dates {
+            margin-top: 14px;
+        }
+        .selected-dates-label {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            background: transparent;
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-body);
+        }
+        .chip-x {
+            cursor: pointer;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            line-height: 1;
+            transition: color 0.15s;
+        }
+        .chip-x:hover { color: var(--white); }
+        .no-dates {
             font-size: 0.75rem;
             color: var(--text-dim);
-            margin-top: 10px;
             letter-spacing: 1px;
-        }
-        .selected-count strong {
-            color: var(--white);
-            font-weight: 600;
         }
 
         /* ─── Submit Button ─── */
@@ -318,10 +346,7 @@
         }
         .btn-submit:hover { opacity: 0.9; }
         .btn-submit:active { transform: scale(0.98); }
-        .btn-submit:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
+        .btn-submit:disabled { opacity: 0.3; cursor: not-allowed; }
 
         /* ─── Guias Screen ─── */
         .guias-section {
@@ -347,12 +372,8 @@
             font-size: 0.9rem;
             outline: none;
         }
-        .guias-filter input[type="date"]:focus {
-            border-color: var(--white);
-        }
-        .guias-filter input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-        }
+        .guias-filter input[type="date"]:focus { border-color: var(--white); }
+        .guias-filter input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 
         .btn-copy {
             padding: 10px 16px;
@@ -369,13 +390,27 @@
             white-space: nowrap;
             transition: all 0.15s;
         }
-        .btn-copy:hover {
-            border-color: var(--white);
+        .btn-copy:hover { border-color: var(--white); }
+        .btn-copy.copied { background: var(--white); color: var(--black); }
+
+        .btn-all {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid var(--border-light);
+            color: var(--text-muted);
+            border-radius: var(--radius);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-bottom: 16px;
+            transition: all 0.15s;
         }
-        .btn-copy.copied {
-            background: var(--white);
-            color: var(--black);
-        }
+        .btn-all:hover { border-color: var(--white); color: var(--white); }
+        .btn-all.active { background: var(--white); color: var(--black); border-color: var(--white); }
 
         .guia-card {
             border: 1px solid var(--border);
@@ -424,10 +459,7 @@
             font-family: var(--font-body);
             transition: all 0.15s;
         }
-        .btn-delete:hover {
-            border-color: #ff4444;
-            color: #ff4444;
-        }
+        .btn-delete:hover { border-color: #ff4444; color: #ff4444; }
 
         .guias-count {
             text-align: center;
@@ -436,9 +468,7 @@
             margin-bottom: 16px;
             letter-spacing: 1px;
         }
-        .guias-count strong {
-            color: var(--white);
-        }
+        .guias-count strong { color: var(--white); }
 
         .empty-state {
             text-align: center;
@@ -450,10 +480,7 @@
             margin-bottom: 12px;
             opacity: 0.3;
         }
-        .empty-state p {
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-        }
+        .empty-state p { font-size: 0.85rem; letter-spacing: 1px; }
 
         /* ─── Toast ─── */
         .toast {
@@ -505,10 +532,7 @@
             color: var(--text-muted);
             line-height: 1.5;
         }
-        .confirm-actions {
-            display: flex;
-            gap: 10px;
-        }
+        .confirm-actions { display: flex; gap: 10px; }
         .confirm-actions button {
             flex: 1;
             padding: 12px;
@@ -532,13 +556,11 @@
             color: var(--black);
         }
 
-        /* ─── Animations ─── */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ─── Scrollbar ─── */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
@@ -581,24 +603,19 @@
                 <input type="text" id="senha" placeholder="Senha da guia">
             </div>
 
-            <div class="field">
-                <label>Quantidade</label>
-                <input type="number" id="quantidade" value="1" min="1">
-            </div>
-
             <div class="calendar-section">
                 <label>Datas</label>
                 <div class="calendar-nav">
                     <button onclick="changeMonth(-1)" aria-label="Mês anterior">&#8249;</button>
-                    <span class="calendar-month" id="calendarMonth"></span>
+                    <span class="cal-month-label" id="monthLabel"></span>
                     <button onclick="changeMonth(1)" aria-label="Próximo mês">&#8250;</button>
                 </div>
-                <div class="weekday-shortcuts" id="weekdayShortcuts"></div>
-                <div class="calendar-grid" id="calendarGrid"></div>
-                <div class="selected-count" id="selectedCount"></div>
+                <div id="weekdayShortcuts" class="weekday-shortcuts"></div>
+                <div id="calGrid" class="cal-grid"></div>
+                <div class="selected-dates" id="selectedDatesArea"></div>
             </div>
 
-            <button class="btn-submit" id="btnSave" onclick="saveGuias()">Salvar Guias</button>
+            <button class="btn-submit" onclick="saveGuias()">Salvar Guias</button>
         </div>
     </div>
 
@@ -606,405 +623,413 @@
     <div id="screen-guias" class="screen">
         <div class="guias-section">
             <div class="guias-filter">
-                <input type="date" id="filterDate" onchange="renderGuias()">
+                <input type="date" id="filterDate" onchange="showFiltered()">
                 <button class="btn-copy" id="btnCopy" onclick="copyGuias()">Copiar</button>
             </div>
+            <button class="btn-all" id="btnAll" onclick="toggleShowAll()">Ver Todas</button>
             <div class="guias-count" id="guiasCount"></div>
             <div id="guiasList"></div>
         </div>
     </div>
 
-    <!-- ═══ Toast ═══ -->
     <div class="toast" id="toast"></div>
 
-    <!-- ═══ Confirm Modal ═══ -->
     <div class="confirm-overlay" id="confirmOverlay">
         <div class="confirm-box">
             <p id="confirmMsg">Tem certeza?</p>
             <div class="confirm-actions">
                 <button class="btn-confirm-cancel" onclick="closeConfirm()">Cancelar</button>
-                <button class="btn-confirm-ok" id="btnConfirmOk" onclick="confirmAction()">Excluir</button>
+                <button class="btn-confirm-ok" onclick="confirmAction()">Excluir</button>
             </div>
         </div>
     </div>
 
 <script>
-// ═══════════════════════════════════════
-// State
-// ═══════════════════════════════════════
-const KEYS = {
+/* ═══ State ═══ */
+var KEYS = {
     data: 'guias_data',
     carteirinhas: 'guias_carteirinhas',
     especialidades: 'guias_especialidades'
 };
 
-let selectedDates = new Set();
-let calendarYear, calendarMonth; // 0-indexed month
-let pendingConfirm = null;
+var selectedDates = {};  // { "2026-04-07": true }
+var curYear, curMonth;   // 0-indexed month
+var pendingConfirm = null;
+var showAllGuias = false;
 
-// ═══════════════════════════════════════
-// Init
-// ═══════════════════════════════════════
-(function init() {
-    const today = new Date();
+var MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+var WEEKDAY_NAMES = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+var WEEKDAY_SHORT = ['D','S','T','Q','Q','S','S'];
+
+/* ═══ Init ═══ */
+(function() {
+    var today = new Date();
     if (today.getDate() >= 15) {
-        calendarMonth = today.getMonth() + 1;
-        calendarYear = today.getFullYear();
-        if (calendarMonth > 11) {
-            calendarMonth = 0;
-            calendarYear++;
-        }
+        curMonth = today.getMonth() + 1;
+        curYear = today.getFullYear();
+        if (curMonth > 11) { curMonth = 0; curYear++; }
     } else {
-        calendarMonth = today.getMonth();
-        calendarYear = today.getFullYear();
+        curMonth = today.getMonth();
+        curYear = today.getFullYear();
     }
 
     renderCalendar();
     setupAutocomplete('carteirinha', KEYS.carteirinhas);
     setupAutocomplete('especialidade', KEYS.especialidades);
 
-    // Set filter date to today
-    document.getElementById('filterDate').value = formatDateISO(today);
+    document.getElementById('filterDate').value = toISO(today);
 
-    // Service worker
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js');
     }
 })();
 
-// ═══════════════════════════════════════
-// Tabs
-// ═══════════════════════════════════════
+/* ═══ Tabs ═══ */
 function switchTab(tab) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === tab); });
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
     document.getElementById('screen-' + tab).classList.add('active');
     if (tab === 'guias') renderGuias();
 }
 
-// ═══════════════════════════════════════
-// Calendar
-// ═══════════════════════════════════════
-const MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const WEEKDAY_NAMES = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-const WEEKDAY_SHORT = ['D','S','T','Q','Q','S','S'];
-
+/* ═══ Calendar ═══ */
 function renderCalendar() {
-    document.getElementById('calendarMonth').textContent = MONTH_NAMES[calendarMonth] + ' ' + calendarYear;
+    document.getElementById('monthLabel').textContent = MONTH_NAMES[curMonth] + ' ' + curYear;
 
-    const grid = document.getElementById('calendarGrid');
+    var grid = document.getElementById('calGrid');
     grid.innerHTML = '';
 
-    // Header
-    WEEKDAY_SHORT.forEach(d => {
-        const cell = document.createElement('div');
-        cell.className = 'calendar-header-cell';
-        cell.textContent = d;
-        grid.appendChild(cell);
-    });
+    // Header row
+    for (var h = 0; h < 7; h++) {
+        var hc = document.createElement('div');
+        hc.className = 'cal-hdr';
+        hc.textContent = WEEKDAY_SHORT[h];
+        grid.appendChild(hc);
+    }
 
-    // Days
-    const firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
-    const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+    // Empty cells before first day
+    var firstDay = new Date(curYear, curMonth, 1).getDay();
+    var daysInMonth = new Date(curYear, curMonth + 1, 0).getDate();
 
-    for (let i = 0; i < firstDay; i++) {
-        const empty = document.createElement('div');
-        empty.className = 'calendar-day empty';
+    for (var e = 0; e < firstDay; e++) {
+        var empty = document.createElement('div');
+        empty.className = 'cal-day empty';
         grid.appendChild(empty);
     }
 
-    for (let d = 1; d <= daysInMonth; d++) {
-        const dateStr = `${calendarYear}-${String(calendarMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-        const cell = document.createElement('div');
-        cell.className = 'calendar-day' + (selectedDates.has(dateStr) ? ' selected' : '');
+    // Day cells
+    for (var d = 1; d <= daysInMonth; d++) {
+        var dateStr = curYear + '-' + pad(curMonth + 1) + '-' + pad(d);
+        var cell = document.createElement('div');
+        cell.className = 'cal-day' + (selectedDates[dateStr] ? ' selected' : '');
         cell.textContent = d;
-        cell.onclick = () => toggleDate(dateStr);
+        cell.setAttribute('data-date', dateStr);
+        cell.onclick = onDayClick;
         grid.appendChild(cell);
     }
 
-    renderWeekdayShortcuts();
-    updateSelectedCount();
+    renderWeekdayButtons();
+    renderSelectedChips();
 }
 
-function toggleDate(dateStr) {
-    if (selectedDates.has(dateStr)) {
-        selectedDates.delete(dateStr);
+function onDayClick() {
+    var ds = this.getAttribute('data-date');
+    if (selectedDates[ds]) {
+        delete selectedDates[ds];
     } else {
-        selectedDates.add(dateStr);
+        selectedDates[ds] = true;
     }
     renderCalendar();
 }
 
 function changeMonth(delta) {
-    calendarMonth += delta;
-    if (calendarMonth > 11) { calendarMonth = 0; calendarYear++; }
-    if (calendarMonth < 0) { calendarMonth = 11; calendarYear--; }
-    // Clear selections when changing month (dates belong to specific months)
-    selectedDates.clear();
+    curMonth += delta;
+    if (curMonth > 11) { curMonth = 0; curYear++; }
+    if (curMonth < 0) { curMonth = 11; curYear--; }
     renderCalendar();
 }
 
-function renderWeekdayShortcuts() {
-    const container = document.getElementById('weekdayShortcuts');
+function renderWeekdayButtons() {
+    var container = document.getElementById('weekdayShortcuts');
     container.innerHTML = '';
-    const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
 
-    WEEKDAY_NAMES.forEach((name, dayIndex) => {
-        const btn = document.createElement('button');
+    for (var i = 0; i < 7; i++) {
+        var btn = document.createElement('button');
         btn.className = 'weekday-btn';
-        btn.textContent = name;
+        btn.textContent = WEEKDAY_NAMES[i];
+        btn.setAttribute('data-day', i);
 
-        // Check if all of this weekday are selected
-        const datesOfDay = getDatesOfWeekday(dayIndex);
-        const allSelected = datesOfDay.length > 0 && datesOfDay.every(d => selectedDates.has(d));
-        if (allSelected && datesOfDay.length > 0) btn.classList.add('active');
+        var dates = getDatesOfWeekday(i);
+        var allSel = dates.length > 0 && dates.every(function(d) { return selectedDates[d]; });
+        if (allSel) btn.classList.add('active');
 
-        btn.onclick = () => toggleWeekday(dayIndex);
+        btn.onclick = onWeekdayClick;
         container.appendChild(btn);
-    });
+    }
+}
+
+function onWeekdayClick() {
+    var dayIdx = parseInt(this.getAttribute('data-day'));
+    var dates = getDatesOfWeekday(dayIdx);
+    var allSel = dates.every(function(d) { return selectedDates[d]; });
+    for (var i = 0; i < dates.length; i++) {
+        if (allSel) {
+            delete selectedDates[dates[i]];
+        } else {
+            selectedDates[dates[i]] = true;
+        }
+    }
+    renderCalendar();
 }
 
 function getDatesOfWeekday(dayIndex) {
-    const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
-    const dates = [];
-    for (let d = 1; d <= daysInMonth; d++) {
-        const dt = new Date(calendarYear, calendarMonth, d);
-        if (dt.getDay() === dayIndex) {
-            dates.push(`${calendarYear}-${String(calendarMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
+    var daysInMonth = new Date(curYear, curMonth + 1, 0).getDate();
+    var dates = [];
+    for (var d = 1; d <= daysInMonth; d++) {
+        if (new Date(curYear, curMonth, d).getDay() === dayIndex) {
+            dates.push(curYear + '-' + pad(curMonth + 1) + '-' + pad(d));
         }
     }
     return dates;
 }
 
-function toggleWeekday(dayIndex) {
-    const dates = getDatesOfWeekday(dayIndex);
-    const allSelected = dates.every(d => selectedDates.has(d));
-    dates.forEach(d => {
-        if (allSelected) selectedDates.delete(d);
-        else selectedDates.add(d);
-    });
+function renderSelectedChips() {
+    var area = document.getElementById('selectedDatesArea');
+    var keys = Object.keys(selectedDates).sort();
+
+    if (keys.length === 0) {
+        area.innerHTML = '<div class="no-dates">Nenhuma data selecionada</div>';
+        return;
+    }
+
+    var html = '<div class="selected-dates-label">' + keys.length + ' data' + (keys.length > 1 ? 's' : '') + ' selecionada' + (keys.length > 1 ? 's' : '') + '</div><div class="chips">';
+    for (var i = 0; i < keys.length; i++) {
+        var parts = keys[i].split('-');
+        var label = parts[2] + '/' + parts[1];
+        html += '<span class="chip">' + label + '<span class="chip-x" onclick="removeDate(\'' + keys[i] + '\')">&times;</span></span>';
+    }
+    html += '</div>';
+    area.innerHTML = html;
+}
+
+function removeDate(ds) {
+    delete selectedDates[ds];
     renderCalendar();
 }
 
-function updateSelectedCount() {
-    const el = document.getElementById('selectedCount');
-    const count = selectedDates.size;
-    el.textContent = count === 0 ? 'Nenhuma data selecionada' : `${count} data${count > 1 ? 's' : ''} selecionada${count > 1 ? 's' : ''}`;
-    if (count > 0) {
-        el.innerHTML = `<strong>${count}</strong> data${count > 1 ? 's' : ''} selecionada${count > 1 ? 's' : ''}`;
-    }
-}
-
-// ═══════════════════════════════════════
-// Autocomplete
-// ═══════════════════════════════════════
+/* ═══ Autocomplete ═══ */
 function setupAutocomplete(inputId, storageKey) {
-    const input = document.getElementById(inputId);
-    const list = document.getElementById('ac-' + inputId);
-    let highlightIndex = -1;
+    var input = document.getElementById(inputId);
+    var list = document.getElementById('ac-' + inputId);
+    var hlIdx = -1;
 
     function getMemory() {
-        return JSON.parse(localStorage.getItem(storageKey) || '[]');
+        try { return JSON.parse(localStorage.getItem(storageKey) || '[]'); }
+        catch(e) { return []; }
     }
 
     function showSuggestions() {
-        const val = input.value.toLowerCase().trim();
-        const items = getMemory().filter(item => item.toLowerCase().includes(val));
+        var val = input.value.toLowerCase().trim();
+        var items = getMemory().filter(function(item) { return item.toLowerCase().indexOf(val) !== -1; });
         if (items.length === 0 || val === '') {
             list.classList.remove('open');
             return;
         }
-        list.innerHTML = items.map((item, i) =>
-            `<div class="autocomplete-item" onmousedown="selectAutocomplete('${inputId}', '${item.replace(/'/g, "\\'")}')">${item}</div>`
-        ).join('');
+        var html = '';
+        for (var i = 0; i < items.length; i++) {
+            html += '<div class="autocomplete-item" data-val="' + escAttr(items[i]) + '">' + escHtml(items[i]) + '</div>';
+        }
+        list.innerHTML = html;
         list.classList.add('open');
-        highlightIndex = -1;
+        hlIdx = -1;
+
+        var acItems = list.querySelectorAll('.autocomplete-item');
+        for (var j = 0; j < acItems.length; j++) {
+            acItems[j].onmousedown = function() {
+                input.value = this.getAttribute('data-val');
+                list.classList.remove('open');
+            };
+        }
     }
 
     input.addEventListener('input', showSuggestions);
     input.addEventListener('focus', showSuggestions);
-    input.addEventListener('blur', () => {
-        setTimeout(() => list.classList.remove('open'), 150);
+    input.addEventListener('blur', function() {
+        setTimeout(function() { list.classList.remove('open'); }, 150);
     });
 
-    input.addEventListener('keydown', (e) => {
-        const items = list.querySelectorAll('.autocomplete-item');
+    input.addEventListener('keydown', function(e) {
+        var items = list.querySelectorAll('.autocomplete-item');
         if (!list.classList.contains('open') || items.length === 0) return;
 
         if (e.key === 'ArrowDown') {
             e.preventDefault();
-            highlightIndex = Math.min(highlightIndex + 1, items.length - 1);
-            items.forEach((el, i) => el.classList.toggle('highlighted', i === highlightIndex));
+            hlIdx = Math.min(hlIdx + 1, items.length - 1);
+            for (var i = 0; i < items.length; i++) items[i].classList.toggle('highlighted', i === hlIdx);
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
-            highlightIndex = Math.max(highlightIndex - 1, 0);
-            items.forEach((el, i) => el.classList.toggle('highlighted', i === highlightIndex));
-        } else if (e.key === 'Enter' && highlightIndex >= 0) {
+            hlIdx = Math.max(hlIdx - 1, 0);
+            for (var i = 0; i < items.length; i++) items[i].classList.toggle('highlighted', i === hlIdx);
+        } else if (e.key === 'Enter' && hlIdx >= 0) {
             e.preventDefault();
-            input.value = items[highlightIndex].textContent;
+            input.value = items[hlIdx].getAttribute('data-val');
             list.classList.remove('open');
         }
     });
 }
 
-function selectAutocomplete(inputId, value) {
-    document.getElementById(inputId).value = value;
-    document.getElementById('ac-' + inputId).classList.remove('open');
-}
-
 function saveToMemory(storageKey, value) {
     if (!value.trim()) return;
-    const items = JSON.parse(localStorage.getItem(storageKey) || '[]');
-    if (!items.includes(value.trim())) {
+    var items = [];
+    try { items = JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch(e) {}
+    if (items.indexOf(value.trim()) === -1) {
         items.push(value.trim());
         localStorage.setItem(storageKey, JSON.stringify(items));
     }
 }
 
-// ═══════════════════════════════════════
-// Save Guias
-// ═══════════════════════════════════════
+/* ═══ Save ═══ */
 function saveGuias() {
-    const carteirinha = document.getElementById('carteirinha').value.trim();
-    const especialidade = document.getElementById('especialidade').value.trim();
-    const nascimento = document.getElementById('nascimento').value;
-    const senha = document.getElementById('senha').value.trim();
-    const quantidade = parseInt(document.getElementById('quantidade').value) || 1;
-
+    var carteirinha = document.getElementById('carteirinha').value.trim();
+    var especialidade = document.getElementById('especialidade').value.trim();
+    var nascimento = document.getElementById('nascimento').value;
+    var senha = document.getElementById('senha').value.trim();
     if (!carteirinha || !especialidade || !nascimento || !senha) {
         showToast('Preencha todos os campos');
         return;
     }
-    if (selectedDates.size === 0) {
+    var dateKeys = Object.keys(selectedDates).sort();
+    if (dateKeys.length === 0) {
         showToast('Selecione ao menos uma data');
         return;
     }
 
-    // Save to memory
     saveToMemory(KEYS.carteirinhas, carteirinha);
     saveToMemory(KEYS.especialidades, especialidade);
 
-    // Create entries
-    const guias = JSON.parse(localStorage.getItem(KEYS.data) || '[]');
-    const sortedDates = [...selectedDates].sort();
+    var guias = [];
+    try { guias = JSON.parse(localStorage.getItem(KEYS.data) || '[]'); } catch(e) {}
 
-    sortedDates.forEach(data => {
+    for (var i = 0; i < dateKeys.length; i++) {
         guias.push({
-            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
-            carteirinha,
-            especialidade,
-            nascimento,
-            senha,
-            quantidade,
-            data,
+            id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5) + i,
+            carteirinha: carteirinha,
+            especialidade: especialidade,
+            nascimento: nascimento,
+            senha: senha,
+
+            data: dateKeys[i],
             criadoEm: new Date().toISOString()
         });
-    });
+    }
 
     localStorage.setItem(KEYS.data, JSON.stringify(guias));
 
-    // Reset form
     document.getElementById('carteirinha').value = '';
     document.getElementById('especialidade').value = '';
     document.getElementById('nascimento').value = '';
     document.getElementById('senha').value = '';
-    document.getElementById('quantidade').value = '1';
-    selectedDates.clear();
+
+    selectedDates = {};
     renderCalendar();
 
-    showToast(`${sortedDates.length} guia${sortedDates.length > 1 ? 's' : ''} salva${sortedDates.length > 1 ? 's' : ''}`);
+    showToast(dateKeys.length + ' guia' + (dateKeys.length > 1 ? 's' : '') + ' salva' + (dateKeys.length > 1 ? 's' : ''));
 }
 
-// ═══════════════════════════════════════
-// Guias do Dia
-// ═══════════════════════════════════════
-function renderGuias() {
-    const filterDate = document.getElementById('filterDate').value;
-    const allGuias = JSON.parse(localStorage.getItem(KEYS.data) || '[]');
-    const filtered = allGuias.filter(g => g.data === filterDate);
+/* ═══ Guias do Dia ═══ */
+function showFiltered() {
+    showAllGuias = false;
+    document.getElementById('btnAll').classList.remove('active');
+    document.getElementById('btnAll').textContent = 'Ver Todas';
+    renderGuias();
+}
 
-    const countEl = document.getElementById('guiasCount');
-    const listEl = document.getElementById('guiasList');
-    const copyBtn = document.getElementById('btnCopy');
+function toggleShowAll() {
+    showAllGuias = !showAllGuias;
+    var btn = document.getElementById('btnAll');
+    btn.classList.toggle('active', showAllGuias);
+    btn.textContent = showAllGuias ? 'Ver por Data' : 'Ver Todas';
+    renderGuias();
+}
+
+function renderGuias() {
+    var allGuias = [];
+    try { allGuias = JSON.parse(localStorage.getItem(KEYS.data) || '[]'); } catch(e) {}
+
+    var filtered;
+    if (showAllGuias) {
+        filtered = allGuias.slice().sort(function(a, b) {
+            return (b.criadoEm || '').localeCompare(a.criadoEm || '');
+        });
+    } else {
+        var filterDate = document.getElementById('filterDate').value;
+        filtered = allGuias.filter(function(g) { return g.data === filterDate; });
+    }
+
+    var countEl = document.getElementById('guiasCount');
+    var listEl = document.getElementById('guiasList');
+    var copyBtn = document.getElementById('btnCopy');
 
     countEl.innerHTML = filtered.length > 0
-        ? `<strong>${filtered.length}</strong> guia${filtered.length > 1 ? 's' : ''}`
+        ? '<strong>' + filtered.length + '</strong> guia' + (filtered.length > 1 ? 's' : '')
         : '';
 
     copyBtn.style.display = filtered.length > 0 ? '' : 'none';
 
     if (filtered.length === 0) {
-        listEl.innerHTML = `
-            <div class="empty-state">
-                <div class="icon">—</div>
-                <p>Nenhuma guia para esta data</p>
-            </div>`;
+        listEl.innerHTML = '<div class="empty-state"><div class="icon">—</div><p>' + (showAllGuias ? 'Nenhuma guia cadastrada' : 'Nenhuma guia para esta data') + '</p></div>';
         return;
     }
 
-    listEl.innerHTML = filtered.map(g => `
-        <div class="guia-card">
-            <div class="guia-card-row">
-                <span class="guia-card-label">Carteirinha</span>
-                <span class="guia-card-value">${escapeHtml(g.carteirinha)}</span>
-            </div>
-            <div class="guia-card-row">
-                <span class="guia-card-label">Especialidade</span>
-                <span class="guia-card-value">${escapeHtml(g.especialidade)}</span>
-            </div>
-            <div class="guia-card-row">
-                <span class="guia-card-label">Nascimento</span>
-                <span class="guia-card-value">${formatDateBR(g.nascimento)}</span>
-            </div>
-            <div class="guia-card-row">
-                <span class="guia-card-label">Senha</span>
-                <span class="guia-card-value">${escapeHtml(g.senha)}</span>
-            </div>
-            <div class="guia-card-row">
-                <span class="guia-card-label">Quantidade</span>
-                <span class="guia-card-value">${g.quantidade}</span>
-            </div>
-            <div class="guia-card-actions">
-                <button class="btn-delete" onclick="deleteGuia('${g.id}')">Excluir</button>
-            </div>
-        </div>
-    `).join('');
+    var html = '';
+    for (var i = 0; i < filtered.length; i++) {
+        var g = filtered[i];
+        html += '<div class="guia-card">' +
+            row('Carteirinha', g.carteirinha) +
+            row('Especialidade', g.especialidade) +
+            row('Nascimento', toBR(g.nascimento)) +
+            row('Senha', g.senha) +
+            row('Data', toBR(g.data)) +
+            '<div class="guia-card-actions"><button class="btn-delete" onclick="deleteGuia(\'' + g.id + '\')">Excluir</button></div>' +
+            '</div>';
+    }
+    listEl.innerHTML = html;
 }
 
-// ═══════════════════════════════════════
-// Copy
-// ═══════════════════════════════════════
-function copyGuias() {
-    const filterDate = document.getElementById('filterDate').value;
-    const allGuias = JSON.parse(localStorage.getItem(KEYS.data) || '[]');
-    const filtered = allGuias.filter(g => g.data === filterDate);
+function row(label, value) {
+    return '<div class="guia-card-row"><span class="guia-card-label">' + label + '</span><span class="guia-card-value">' + escHtml(String(value)) + '</span></div>';
+}
 
+/* ═══ Copy ═══ */
+function copyGuias() {
+    var filterDate = document.getElementById('filterDate').value;
+    var allGuias = [];
+    try { allGuias = JSON.parse(localStorage.getItem(KEYS.data) || '[]'); } catch(e) {}
+    var filtered = allGuias.filter(function(g) { return g.data === filterDate; });
     if (filtered.length === 0) return;
 
-    const text = filtered.map((g, i) =>
-        `Guia ${i + 1}\n` +
-        `Carteirinha: ${g.carteirinha}\n` +
-        `Especialidade: ${g.especialidade}\n` +
-        `Nascimento: ${formatDateBR(g.nascimento)}\n` +
-        `Senha: ${g.senha}\n` +
-        `Quantidade: ${g.quantidade}\n` +
-        `Data: ${formatDateBR(g.data)}`
-    ).join('\n\n');
+    var lines = [];
+    for (var i = 0; i < filtered.length; i++) {
+        var g = filtered[i];
+        lines.push(
+            'Guia ' + (i + 1) + '\n' +
+            'Carteirinha: ' + g.carteirinha + '\n' +
+            'Especialidade: ' + g.especialidade + '\n' +
+            'Nascimento: ' + toBR(g.nascimento) + '\n' +
+            'Senha: ' + g.senha + '\n' +
+            'Data: ' + toBR(g.data)
+        );
+    }
 
-    navigator.clipboard.writeText(text).then(() => {
-        const btn = document.getElementById('btnCopy');
+    navigator.clipboard.writeText(lines.join('\n\n')).then(function() {
+        var btn = document.getElementById('btnCopy');
         btn.textContent = 'Copiado!';
         btn.classList.add('copied');
-        setTimeout(() => {
-            btn.textContent = 'Copiar';
-            btn.classList.remove('copied');
-        }, 1500);
+        setTimeout(function() { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
     });
 }
 
-// ═══════════════════════════════════════
-// Delete
-// ═══════════════════════════════════════
+/* ═══ Delete ═══ */
 function deleteGuia(id) {
     pendingConfirm = id;
     document.getElementById('confirmMsg').textContent = 'Excluir esta guia?';
@@ -1012,15 +1037,15 @@ function deleteGuia(id) {
 }
 
 function confirmAction() {
-    if (pendingConfirm) {
-        let guias = JSON.parse(localStorage.getItem(KEYS.data) || '[]');
-        guias = guias.filter(g => g.id !== pendingConfirm);
-        localStorage.setItem(KEYS.data, JSON.stringify(guias));
-        pendingConfirm = null;
-        closeConfirm();
-        renderGuias();
-        showToast('Guia excluída');
-    }
+    if (!pendingConfirm) return;
+    var guias = [];
+    try { guias = JSON.parse(localStorage.getItem(KEYS.data) || '[]'); } catch(e) {}
+    guias = guias.filter(function(g) { return g.id !== pendingConfirm; });
+    localStorage.setItem(KEYS.data, JSON.stringify(guias));
+    pendingConfirm = null;
+    closeConfirm();
+    renderGuias();
+    showToast('Guia excluída');
 }
 
 function closeConfirm() {
@@ -1028,30 +1053,34 @@ function closeConfirm() {
     pendingConfirm = null;
 }
 
-// ═══════════════════════════════════════
-// Utils
-// ═══════════════════════════════════════
-function formatDateISO(date) {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+/* ═══ Utils ═══ */
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+function toISO(date) {
+    return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate());
 }
 
-function formatDateBR(isoStr) {
-    if (!isoStr) return '';
-    const [y, m, d] = isoStr.split('-');
-    return `${d}/${m}/${y}`;
+function toBR(iso) {
+    if (!iso) return '';
+    var p = iso.split('-');
+    return p[2] + '/' + p[1] + '/' + p[0];
 }
 
-function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
+function escHtml(s) {
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+}
+
+function escAttr(s) {
+    return s.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2200);
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2200);
 }
 </script>
 </body>
